@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 W1 第一个端到端脚本：验证 xarray + cartopy + matplotlib 整条链路。
 
@@ -11,7 +11,7 @@ W1 第一个端到端脚本：验证 xarray + cartopy + matplotlib 整条链路�
     python src/main.py
 
 输出：
-    figures/wind_demo.png
+    3_成果图/wind_demo.png
 """
 import sys
 from pathlib import Path
@@ -31,7 +31,7 @@ import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 
 ROOT = Path(__file__).resolve().parent.parent
-FIG_DIR = ROOT / "figures"
+FIG_DIR = ROOT / "3_成果图"
 FIG_DIR.mkdir(exist_ok=True)
 
 

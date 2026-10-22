@@ -27,6 +27,7 @@ CMFD 基本信息（v1.6，中科院青藏所，TPDC 发布）：
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -134,11 +135,20 @@ def subset(da: xr.DataArray, lat_name: str, lon_name: str,
 # ----------------------------------------------------------------------
 # 3. 出图（与 main.py 同一套审美）
 # ----------------------------------------------------------------------
-def plot(da: xr.DataArray, lat_name: str, lon_name: str, title: str, out_png: Path) -> None:
+def plot(da: xr.DataArray, lat_name: str, lon_name: str, title: str, out_png: Path,
+         vmin=None, vmax=None) -> None:
     fig, ax = plt.subplots(figsize=(9, 6), subplot_kw={"projection": ccrs.PlateCarree()})
 
-    cf = ax.contourf(da[lon_name], da[lat_name], da, levels=20, cmap="viridis",
-                     transform=ccrs.PlateCarree(), extend="both")
+    # ⚠️ contourf 的坑：一旦 levels 给整数，matplotlib 会按数据自身的范围重新划分等值线，
+    #    此时 vmin/vmax 会被忽略（色标仍然跟着数据走）。所以必须显式构造 levels 数组。
+    if vmin is not None and vmax is not None:
+        levels = np.linspace(vmin, vmax, 21)
+    else:
+        levels = 20
+
+    cf = ax.contourf(da[lon_name], da[lat_name], da, levels=levels, cmap="viridis",
+                     transform=ccrs.PlateCarree(), extend="both",
+                     vmin=vmin, vmax=vmax)
     cb = fig.colorbar(cf, ax=ax, shrink=0.85, pad=0.03)
     cb.set_label(da.attrs.get("units", da.attrs.get("unit", "")), fontsize=10)
 
@@ -166,6 +176,8 @@ def main() -> int:
                     help="CMFD 的 .nc 文件路径（不填则自动用 data 里最新的 .nc）")
     ap.add_argument("--month", type=int, default=None, help="只取某个月（1—12）")
     ap.add_argument("--inspect", action="store_true", help="只打印结构，不出图")
+    ap.add_argument("--vmin", type=float, default=None, help="色标下限（做多图对比时固定它）")
+    ap.add_argument("--vmax", type=float, default=None, help="色标上限（做多图对比时固定它）")
     args = ap.parse_args()
 
     # 不传 --file 时自动找：避免在命令行里手敲中文路径（PowerShell 5.1 会乱码）
@@ -193,14 +205,24 @@ def main() -> int:
 
         da = subset(ds[info["var"]], info["lat"], info["lon"], month=args.month)
 
-        tag = path.stem
-        if args.month:
-            tag += f"_{args.month:02d}月"
-        out_png = FIG_DIR / f"cmfd_wind_{tag}.png"
-        FIG_DIR.mkdir(exist_ok=True)
+        # 文件名里通常带 "197901-201812" 这样的时间区间，抽出来做标题，
+        # 否则标题会变成一长串文件名，非常难看。
+        period = ""
+        m = re.search(r"(\d{6})-(\d{6})", path.stem)
+        if m:
+            period = f"{m.group(1)[:4]}—{m.group(2)[:4]}"
+        else:
+            period = path.stem
 
-        title = f"新疆区域 10 m 风速（CMFD {tag}）"
-        plot(da, info["lat"], info["lon"], title, out_png)
+        tag = period.replace("—", "-")
+        if args.month:
+            tag += f"-{args.month:02d}月"
+        FIG_DIR.mkdir(exist_ok=True)
+        out_png = FIG_DIR / f"CMFD风速_{tag}.png"
+
+        what = f"{args.month} 月平均" if args.month else "多年平均"
+        title = f"新疆区域 近地面风速（CMFD，{period}，{what}）"
+        plot(da, info["lat"], info["lon"], title, out_png, vmin=args.vmin, vmax=args.vmax)
 
         print("-" * 62)
         print(f"area mean: {float(da.mean()):.2f} m/s")

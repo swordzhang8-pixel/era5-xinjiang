@@ -1,4 +1,4 @@
-﻿data/
+data/
 *.nc
 *.grib
 *.grib2
@@ -6,3 +6,10 @@ __pycache__/
 .ipynb_checkpoints/
 *.pyc
 .DS_Store
+
+# 凭据：绝不入库
+.cdsapirc
+*.token
+*token*.txt
+token*.bat
+token*.ps1

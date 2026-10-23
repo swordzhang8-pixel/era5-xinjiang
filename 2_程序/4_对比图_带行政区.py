@@ -75,7 +75,8 @@ def load_admin():
 
 
 def load_fields():
-    nc = sorted(DATA_DIR.glob("*.nc"))[0]
+    # 跳过 ERA5（0.25°、单月），这里要的是 CMFD 的多年月气候态
+    nc = sorted(p for p in DATA_DIR.glob("*.nc") if not p.name.startswith("era5_"))[0]
     ds = xr.open_dataset(nc, decode_times=True)
     w = ds["wind"].sel(lat=slice(EXTENT[2], EXTENT[3]), lon=slice(EXTENT[0], EXTENT[1]))
     jan = w.sel(time=w["time"].dt.month == 1).mean("time")

@@ -184,7 +184,9 @@ def main() -> int:
     if args.file:
         path = Path(args.file)
     else:
-        cands = sorted(DATA_DIR.glob("*.nc"), key=lambda p: p.stat().st_mtime, reverse=True)
+        # 只挑 CMFD 等国产数据，跳过 ERA5（era5_*.nc 归 6/7 号脚本）
+        cands = sorted((p for p in DATA_DIR.glob("*.nc") if not p.name.startswith("era5_")),
+                       key=lambda p: p.stat().st_mtime, reverse=True)
         if not cands:
             print(f"[error] {DATA_DIR} 里没有 .nc 文件", file=sys.stderr)
             print("       先把 CMFD/ERA5 的数据文件放进 data 文件夹", file=sys.stderr)

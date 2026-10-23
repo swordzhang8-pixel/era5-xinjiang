@@ -48,7 +48,9 @@ def monthly_series(da, time_dim="time") -> np.ndarray:
 
 
 def main() -> None:
-    nc = glob.glob(str(DATA_DIR / "*.nc"))[0]
+    # 跳过 ERA5（0.25°、单月），这里要的是 CMFD 的多年月气候态
+    nc = sorted(p for p in glob.glob(str(DATA_DIR / "*.nc"))
+                if not Path(p).name.startswith("era5_"))[0]
     ds = xr.open_dataset(nc, decode_times=True)
     wind = ds["wind"]
 

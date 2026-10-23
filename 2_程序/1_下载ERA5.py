@@ -1,118 +1,178 @@
-# -*- coding: utf-8 -*-
+"""下载 ERA5 单层数据（新疆区域 35-50N / 70-100E，6 小时，风+气温）。
+
+用法（在仓库根目录）：
+    python 2_程序/1_下载ERA5.py --check            # 只检查 key，不发请求
+    python 2_程序/1_下载ERA5.py                    # 下载默认月份 2020-01
+    python 2_程序/1_下载ERA5.py 2020-01 2020-04    # 指定月份
+    python 2_程序/1_下载ERA5.py --all              # 下载 4 个代表月
+
+首次使用前先设置 key：
+    python 2_程序/0_设置CDS密钥.py
+
+输出：data/era5_<年><月>.nc（可用环境变量 ERA5_DATA_DIR 覆盖目录）
 """
-下载 ERA5 单层数据（W1 第二步：拿到真实数据）。
 
-前置条件（只需做一次）：
-    1. 已注册 https://cds.climate.copernicus.eu
-    2. 已在该数据集页面点击 "Accept licence"
-    3. C:\\Users\\<你的用户名>\\.cdsapirc 里填好了 url 和 key
-
-用法：
-    conda activate met
-    python scripts/download_era5.py
-    python scripts/download_era5.py --year 2020 --month 1
-    python scripts/download_era5.py --dry-run     # 只看请求内容，不下载
-
-输出：
-    1_原始数据/era5_<year><month>.nc
-"""
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = ROOT / "data"
+BASE = Path(__file__).resolve().parent.parent      # 仓库根目录（era5-xinjiang/）
 
-# 新疆区域：北 50、西 70、南 35、东 100（顺序必须是 N/W/S/E）
-AREA = [50.0, 70.0, 35.0, 100.0]
+# 数据放 data/：netCDF4/HDF5 在 Windows 上读写非 ASCII 路径会失败，
+# 所以整个仓库路径都必须保持英文。
+# 可用环境变量 ERA5_DATA_DIR 覆盖。
+DATA = Path(os.environ.get("ERA5_DATA_DIR", BASE / "data"))
+RC = Path(os.path.expanduser("~/.cdsapirc"))
+
+URL = "https://cds.climate.copernicus.eu/api"
+DATASET = "reanalysis-era5-single-levels"
+
+# 新疆区域：北, 西, 南, 东
+AREA = [50, 70, 35, 100]
 
 VARIABLES = [
     "10m_u_component_of_wind",
     "10m_v_component_of_wind",
     "2m_temperature",
-    "surface_pressure",
 ]
 
-# 先只下 4 个时次（00/06/12/18），一次请求小、下得快；
-# 跑通后想按时次全下，把下面改成 [f"{h:02d}:00" for h in range(24)]
-TIMES = ["00:00", "06:00", "12:00", "18:00"]
+HOURS = ["00:00", "06:00", "12:00", "18:00"]
+
+DEFAULT_MONTHS = ["2020-01"]
+ALL_MONTHS = ["2020-01", "2020-04", "2020-07", "2020-10"]
 
 
-def build_request(year: int, month: int) -> dict:
+def read_key() -> str | None:
+    """读 .cdsapirc，返回可用的 key；不可用返回 None。"""
+    if not RC.exists():
+        return None
+    key = ""
+    for line in RC.read_text(encoding="utf-8", errors="replace").splitlines():
+        if line.strip().lower().startswith("key:"):
+            key = line.split(":", 1)[1].strip()
+            break
+    key = key.strip('"').strip("'").strip()
+    if not key:
+        return None
+    return key
+
+
+def explain_missing_key() -> None:
+    print("还没有可用的 API key。")
+    print()
+    print("  1. 浏览器登录 https://cds.climate.copernicus.eu")
+    print("  2. 打开 https://cds.climate.copernicus.eu/profile")
+    print("  3. 找到「API key」，复制整串（形如 123456:abcdef...）")
+    print("  4. 运行：python 2_程序/0_设置CDS密钥.py")
+    print()
+    print(f"（配置文件位置：{RC}）")
+
+
+def build_request(year: str, month: str) -> dict:
     return {
         "product_type": ["reanalysis"],
         "variable": VARIABLES,
-        "year": [str(year)],
-        "month": [f"{month:02d}"],
+        "year": [year],
+        "month": [month],
         "day": [f"{d:02d}" for d in range(1, 32)],
-        "time": TIMES,
+        "time": HOURS,
         "area": AREA,
         "data_format": "netcdf",
         "download_format": "unarchived",
     }
 
 
-def check_rcfile() -> bool:
-    rc = Path.home() / ".cdsapirc"
-    if not rc.exists():
-        print(f"[错误] 找不到配置文件：{rc}", file=sys.stderr)
-        print("       请在其中写入两行：", file=sys.stderr)
-        print("       url: https://cds.climate.copernicus.eu/api", file=sys.stderr)
-        print("       key: 你的个人访问令牌", file=sys.stderr)
-        return False
-    text = rc.read_text(encoding="utf-8", errors="ignore")
-    if "在这里" in text or "PASTE" in text or "你的" in text:
-        print(f"[错误] {rc} 里还是占位符，请把 key 换成你自己的令牌", file=sys.stderr)
-        return False
-    return True
+def describe(path: Path) -> None:
+    """下载后用 xarray 打印结构，顺手验证文件可读。"""
+    try:
+        import xarray as xr
+    except ImportError:
+        print("  （没装 xarray，跳过结构检查）")
+        return
+
+    if path.read_bytes()[:2] == b"PK":
+        print("  ⚠ 拿到的是 zip，不是 nc。用 unzip 解开后再打开。")
+        return
+
+    with xr.open_dataset(path) as ds:
+        dims = " × ".join(f"{k}={v}" for k, v in ds.sizes.items())
+        print(f"  维度: {dims}")
+        print(f"  变量: {', '.join(ds.data_vars)}")
+        if "time" in ds.coords:
+            t = ds.time.values
+            print(f"  时间: {t[0]} → {t[-1]}（UTC，{len(t)} 个时次）")
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--year", type=int, default=2020)
-    ap.add_argument("--month", type=int, default=1)
-    ap.add_argument("--dry-run", action="store_true", help="只打印请求，不下载")
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser(description="下载 ERA5 单层数据")
+    parser.add_argument("months", nargs="*", help="月份，如 2020-01；留空用默认")
+    parser.add_argument("--all", action="store_true", help="下载 4 个代表月")
+    parser.add_argument("--check", action="store_true", help="只检查 key，不下载")
+    parser.add_argument("--force", action="store_true", help="已存在也重下")
+    args = parser.parse_args()
 
-    DATA_DIR.mkdir(exist_ok=True)
-    out = DATA_DIR / f"era5_{args.year}{args.month:02d}.nc"
-    request = build_request(args.year, args.month)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
 
-    print(f"区域      : {AREA}  (N/W/S/E)")
-    print(f"变量      : {len(VARIABLES)} 个")
-    print(f"时次      : {TIMES}")
-    print(f"输出      : {out}")
+    key = read_key()
 
-    if args.dry_run:
-        print("\n[dry-run] 请求内容：")
-        for k, v in request.items():
-            print(f"  {k}: {v}")
+    if args.check:
+        if key is None:
+            explain_missing_key()
+            return 1
+        print(f"key 已就位（{len(key)} 字符，{RC}）")
+        print(f"目标区域: {AREA}（北西南东，即 35-50N / 70-100E）")
+        print(f"变量: {', '.join(VARIABLES)}")
+        print(f"输出目录: {DATA}")
+        print("可以直接跑了：python 2_程序/1_下载ERA5.py")
         return 0
 
-    if not check_rcfile():
-        return 2
-
-    import cdsapi  # 延迟导入，--dry-run 时不需要它
-
-    try:
-        client = cdsapi.Client()
-        print("\n正在提交请求（首次可能排队几分钟，不要关窗口）...")
-        client.retrieve("reanalysis-era5-single-levels", request, str(out))
-    except Exception as exc:  # noqa: BLE001
-        msg = str(exc)
-        print(f"\n[失败] {msg}", file=sys.stderr)
-        if "licence" in msg.lower() or "403" in msg:
-            print("→ 去数据集页面点 'Accept licence'，然后重试", file=sys.stderr)
-        elif "401" in msg or "authentication" in msg.lower():
-            print("→ key 不对或过期，去 https://cds.climate.copernicus.eu/profile 重新复制", file=sys.stderr)
+    if key is None:
+        explain_missing_key()
         return 1
 
-    size_mb = out.stat().st_size / 1024 / 1024
-    print(f"\n完成：{out}  ({size_mb:.1f} MB)")
+    months = ALL_MONTHS if args.all else (args.months or DEFAULT_MONTHS)
+
+    DATA.mkdir(parents=True, exist_ok=True)
+
+    import cdsapi
+
+    client = cdsapi.Client(url=URL, key=key)
+    print(f"准备下载 {len(months)} 个月：{', '.join(months)}")
+    print("提交后会在 CDS 排队，进度条走完才落盘；别关窗口。")
+    print()
+
+    for ym in months:
+        year, month = ym.split("-")
+        target = DATA / f"era5_{year}{month}.nc"
+
+        if target.exists() and not args.force:
+            print(f"[跳过] {target.name} 已存在（{target.stat().st_size / 1e6:.1f} MB）")
+            continue
+
+        print(f"[下载] {ym} → {target.name}")
+        try:
+            client.retrieve(DATASET, build_request(year, month), str(target))
+        except Exception as exc:  # noqa: BLE001
+            msg = str(exc)
+            print(f"  失败：{type(exc).__name__}: {msg[:300]}")
+            if "403" in msg or "forbidden" in msg.lower():
+                print("  多半是没同意数据集条款：打开数据集页拉到最底部点 Accept")
+            elif "401" in msg:
+                print("  key 不对：重跑 python 2_程序/0_设置CDS密钥.py")
+            continue
+
+        size_mb = target.stat().st_size / 1e6
+        print(f"  完成：{target.name}（{size_mb:.1f} MB）")
+        describe(target)
+        print()
+
+    print(f"完成。文件在 {DATA}；用 xarray 打开即可。")
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

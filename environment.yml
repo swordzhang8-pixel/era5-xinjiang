@@ -1,4 +1,4 @@
-﻿name: met
+name: met
 channels:
   - conda-forge
 dependencies:
@@ -161,6 +161,7 @@ dependencies:
   - pyproj=3.7.2=py311hbbb2c79_5
   - pyshp=3.1.6=pyhcf101f3_0
   - pyside6=6.11.2=py311h700d311_1
+  - pytest
   - python=3.11.17=hb12b558_2_cpython
   - python-dateutil=2.9.0.post0=pyhe01879c_2
   - python-eccodes=2.50.0=np2py311h96af300_0

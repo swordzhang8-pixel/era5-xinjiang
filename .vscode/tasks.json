@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "运行 看数据.py（met 环境）",
+            "type": "shell",
+            "command": "D:\\app\\miniforge\\Scripts\\conda.exe",
+            "args": [
+                "run",
+                "-n",
+                "met",
+                "--no-capture-output",
+                "python",
+                "试验/看数据.py"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

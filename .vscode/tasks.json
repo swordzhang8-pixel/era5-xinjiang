@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "运行 看数据.py（met 环境）",
+            "label": "运行当前文件（met 环境）",
             "type": "shell",
             "command": "D:\\app\\miniforge\\Scripts\\conda.exe",
             "args": [
@@ -11,7 +11,7 @@
                 "met",
                 "--no-capture-output",
                 "python",
-                "试验/看数据.py"
+                "${file}"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -19,6 +19,35 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "跑测试（pytest）",
+            "type": "shell",
+            "command": "D:\\app\\miniforge\\Scripts\\conda.exe",
+            "args": [
+                "run",
+                "-n",
+                "met",
+                "--no-capture-output",
+                "python",
+                "-m",
+                "pytest",
+                "-q"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
             },
             "problemMatcher": []
         }

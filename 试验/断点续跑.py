@@ -45,7 +45,9 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--from-year", type=int, default=1979)
     ap.add_argument("--to-year", type=int, default=2018)
-    ap.add_argument("--delay", type=float, default=0.0, help="每年额外等待秒数，便于演示中断")
+    # ---- 默认给 0.5 秒：40 年 ≈ 20 秒，足够按 Ctrl+C 观察中断。
+    #      要是嫌慢，跑一次 `--delay 0` 就是全速（约 2 秒跑完 40 年）。
+    ap.add_argument("--delay", type=float, default=0.5, help="每年额外等待秒数；0 表示全速")
     args = ap.parse_args()
 
     years = list(range(args.from_year, args.to_year + 1))

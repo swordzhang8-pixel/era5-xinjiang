@@ -83,6 +83,7 @@ def plot_panels(
     cmap: str = "viridis",
     dpi: int = 200,
     ncols: int = 2,
+    cbar_label: str = CBAR_LABEL,
 ):
     """多子图：共用一套 levels 和一个色标，避免「各自 vmin/vmax」导致不可比。"""
     setup_style()
@@ -105,7 +106,7 @@ def plot_panels(
 
     cb = fig.colorbar(cf, ax=axes, orientation="horizontal", shrink=0.75,
                       pad=0.05, aspect=40)
-    cb.set_label(CBAR_LABEL)
+    cb.set_label(cbar_label)
     if suptitle:
         fig.suptitle(suptitle, fontsize=15, y=0.97)
     _save(fig, out, dpi)

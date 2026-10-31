@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "era5x"
+version = "0.1.0"
+description = "ERA5 风场分析小工具：读数据、算风速、出图、算极端指数"
+requires-python = ">=3.11"
+# 依赖只声明不锁定：conda 环境里已经装好了，pip install -e . --no-deps 即可
+dependencies = ["xarray", "numpy", "matplotlib", "cartopy", "netCDF4", "dask"]
+
+[project.scripts]
+era5x = "era5x.cli:main"        # 装完就能直接在终端敲 era5x
+
+[tool.setuptools.packages.find]
+where = ["src"]                  # 包在 src/ 布局下，别让 setuptools 去根目录找

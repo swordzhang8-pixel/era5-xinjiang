@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: era5x
+Version: 0.1.0
+Summary: ERA5 风场分析小工具：读数据、算风速、出图、算极端指数
+Requires-Python: >=3.11
+Requires-Dist: xarray
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: cartopy
+Requires-Dist: netCDF4
+Requires-Dist: dask

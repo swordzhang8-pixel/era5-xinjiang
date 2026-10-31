@@ -13,3 +13,8 @@ __pycache__/
 *token*.txt
 token*.bat
 token*.ps1
+
+# 打包产物（pip install -e . 生成），不入库
+*.egg-info/
+build/
+dist/

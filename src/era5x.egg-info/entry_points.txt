@@ -1,2 +1,0 @@
-[console_scripts]
-era5x = era5x.cli:main

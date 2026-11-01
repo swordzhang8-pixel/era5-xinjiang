@@ -40,8 +40,6 @@ INFO = {
     "mercator": ("墨卡托", "保角，但高纬面积放大"),
 }
 
-eplot.plot_map(field, "x.png", projection="lambert",
-               rivers=True, admin=True, scalebar=True, north=True)
 def main() -> int:
     eplot.setup_style()
 

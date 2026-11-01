@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+import json
+from functools import lru_cache
 from pathlib import Path
 
 import matplotlib
@@ -17,10 +19,12 @@ import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
+from shapely.geometry import shape
 
 EXTENT = [70, 100, 35, 50]                       # 新疆：70–100°E / 35–50°N
 DEFAULT_LEVELS = np.arange(0, 8.5, 0.5)          # 固定的等值线，跨图可比
 CBAR_LABEL = "10 米风速 (m s$^{-1}$)"
+ADMIN_GEOJSON = Path(__file__).resolve().parents[2] / "data" / "admin" / "xinjiang_pref.json"
 
 # 投影选择表：名字 → 构造函数（用 lambda 是为了延迟创建，图与图之间不共享状态）
 # - plate   等经纬度：画得快，但高纬东西向被拉长，面积失真
@@ -39,15 +43,69 @@ def setup_style() -> None:
     plt.rcParams["axes.unicode_minus"] = False
 
 
-def _add_map_features(ax, gridlines: bool = False) -> None:
-    proj = ccrs.PlateCarree()
-    ax.set_extent(EXTENT, crs=proj)
+@lru_cache(maxsize=2)
+def _load_admin_geoms(path: str):
+    """读新疆地州边界 GeoJSON，返回几何列表（缓存，避免每张图重读 116 KB）。
+
+    为什么不用 shapefile：cartopy 的 shapereader 只认 shp；GeoJSON 用 json + shapely 两行就够。
+    """
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    return [shape(f["geometry"]) for f in data["features"]]
+
+
+def _add_scale_bar(ax, length_km: int = 400, lat: float = 36.2, lon: float = 74.0) -> None:
+    """左下角画比例尺。
+
+    经度方向的 1° 对应的实际距离随纬度收缩：1° ≈ 111.32·cos(lat) km，
+    所以同样 400 km，在 36°N 需要 400 / (111.32·cos36°) ≈ 4.4 个经度。
+    位置刻意放在 36°N 附近——那里是塔里木盆地南缘，数据连续、没有国界穿过。
+    """
+    deg = length_km / (111.32 * np.cos(np.deg2rad(lat)))
+    ax.plot([lon, lon + deg], [lat, lat], color="black", lw=3.5,
+            transform=ccrs.PlateCarree(), zorder=8, solid_capstyle="butt")
+    ax.text(lon + deg / 2, lat + 0.5, f"{length_km} km", ha="center", va="bottom",
+            fontsize=8, transform=ccrs.PlateCarree(), zorder=8)
+
+
+def _add_north_arrow(ax) -> None:
+    """右上角画指北针（axes 坐标，不随投影变）。"""
+    ax.annotate("N", xy=(0.94, 0.94), xytext=(0.94, 0.82),
+                xycoords="axes fraction", textcoords="axes fraction",
+                ha="center", va="center", fontsize=10, fontweight="bold", zorder=9,
+                arrowprops=dict(arrowstyle="-|>", color="black", lw=1.2))
+
+
+def _add_map_features(ax, gridlines: bool = False, *, rivers: bool = False,
+                      admin: str | Path | None = None, scalebar: bool = False,
+                      north: bool = False) -> None:
+    """统一加地图要素。默认只加海岸线与国界，其余按需打开。"""
+    data_crs = ccrs.PlateCarree()
+    ax.set_extent(EXTENT, crs=data_crs)          # 范围按经纬度给，投影自己换算
     ax.add_feature(cfeature.COASTLINE, linewidth=0.5, edgecolor="0.3")
     ax.add_feature(cfeature.BORDERS, linewidth=0.8, edgecolor="black")
+
+    if rivers:
+        # Natural Earth 河流数据首次会联网下载；失败不该让整张图报废
+        try:
+            ax.add_feature(cfeature.RIVERS.with_scale("50m"), linewidth=0.35,
+                           edgecolor="steelblue", zorder=4)
+        except Exception as exc:                 # noqa: BLE001
+            print(f"⚠ 河流要素加载失败（跳过）：{type(exc).__name__}")
+
+    if admin:
+        geoms = _load_admin_geoms(str(admin) if admin is not True else str(ADMIN_GEOJSON))
+        ax.add_geometries(geoms, crs=data_crs, facecolor="none",
+                          edgecolor="0.15", linewidth=0.45, zorder=5)
+
     if gridlines:
         gl = ax.gridlines(draw_labels=True, linestyle=":", linewidth=0.4, color="0.5")
         gl.top_labels = False
         gl.right_labels = False
+
+    if scalebar:
+        _add_scale_bar(ax)
+    if north:
+        _add_north_arrow(ax)
 
 
 def _save(fig, out, dpi: int) -> Path:
@@ -68,10 +126,15 @@ def plot_map(
     gridlines: bool = True,
     cbar_label: str = CBAR_LABEL,
     projection: str = "plate",
+    rivers: bool = False,
+    admin: str | Path | None = None,
+    scalebar: bool = False,
+    north: bool = False,
 ):
     """单张填色图：风速场 + 国界 + 海岸线 + 色标。
 
     projection: "plate" | "lambert" | "mercator"，默认 plate（与旧行为一致）。
+    rivers/admin/scalebar/north: 可选要素，默认全关，保证旧图不变样。
     """
     setup_style()
     if projection not in PROJECTIONS:
@@ -85,7 +148,8 @@ def plot_map(
                      cmap=cmap, transform=data_crs, extend="both")
     cb = fig.colorbar(cf, ax=ax, shrink=0.85, pad=0.03)
     cb.set_label(cbar_label)
-    _add_map_features(ax, gridlines=gridlines)
+    _add_map_features(ax, gridlines=gridlines, rivers=rivers, admin=admin,
+                      scalebar=scalebar, north=north)
     if title:
         ax.set_title(title, pad=12)
     _save(fig, out, dpi)

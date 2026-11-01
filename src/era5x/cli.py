@@ -45,7 +45,11 @@ def cmd_plot(args: argparse.Namespace) -> int:
     out = Path(args.out)
     eplot.plot_map(field, out, title=args.title or f"ERA5 10m 风速 {args.month or '全时段平均'}",
                    levels=None,            # None → 用库里的默认 levels（0–8.5，跨图可比）
-                   projection=args.projection)   # plate / lambert / mercator
+                   projection=args.projection,   # plate / lambert / mercator
+                   rivers=args.rivers,           # 河流
+                   admin=args.admin or None,     # 地州边界（给路径，或 --admin 用默认）
+                   scalebar=args.scalebar,       # 比例尺
+                   north=args.north)             # 指北针
     print(f"已保存: {out}（投影 {args.projection}）")
     return 0
 
@@ -98,6 +102,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--title", default=None)
     # 投影：默认 plate（等经纬度），与旧行为一致；lambert 适合中纬度大区域
     p.add_argument("--projection", default="plate", choices=["plate", "lambert", "mercator"])
+    # 可选地图要素：默认全关，逐个开关，避免旧图变样
+    p.add_argument("--rivers", action="store_true", help="叠加河流（首次会下载 Natural Earth 数据）")
+    p.add_argument("--admin", nargs="?", const=True, default=None,
+                   help="叠加地州边界；不给值用默认 data/admin/xinjiang_pref.json")
+    p.add_argument("--scalebar", action="store_true", help="左下角加 500 km 比例尺")
+    p.add_argument("--north", action="store_true", help="右上角加指北针")
     p.set_defaults(func=cmd_plot)
 
     p = sub.add_parser("series", help="画单点时间序列")

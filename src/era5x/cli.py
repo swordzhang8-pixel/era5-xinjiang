@@ -44,8 +44,9 @@ def cmd_plot(args: argparse.Namespace) -> int:
     field = ws.mean("time")                # 时间平均 → 一张 2D 场
     out = Path(args.out)
     eplot.plot_map(field, out, title=args.title or f"ERA5 10m 风速 {args.month or '全时段平均'}",
-                   levels=None)            # None → 用库里的默认 levels（0–8.5，跨图可比）
-    print(f"已保存: {out}")
+                   levels=None,            # None → 用库里的默认 levels（0–8.5，跨图可比）
+                   projection=args.projection)   # plate / lambert / mercator
+    print(f"已保存: {out}（投影 {args.projection}）")
     return 0
 
 
@@ -95,6 +96,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--month", default=None, help="如 2015-07；省略=全时段平均")
     p.add_argument("--out", default="3_成果图/cli_plot.png")
     p.add_argument("--title", default=None)
+    # 投影：默认 plate（等经纬度），与旧行为一致；lambert 适合中纬度大区域
+    p.add_argument("--projection", default="plate", choices=["plate", "lambert", "mercator"])
     p.set_defaults(func=cmd_plot)
 
     p = sub.add_parser("series", help="画单点时间序列")

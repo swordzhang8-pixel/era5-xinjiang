@@ -22,6 +22,16 @@ EXTENT = [70, 100, 35, 50]                       # 新疆：70–100°E / 35–5
 DEFAULT_LEVELS = np.arange(0, 8.5, 0.5)          # 固定的等值线，跨图可比
 CBAR_LABEL = "10 米风速 (m s$^{-1}$)"
 
+# 投影选择表：名字 → 构造函数（用 lambda 是为了延迟创建，图与图之间不共享状态）
+# - plate   等经纬度：画得快，但高纬东西向被拉长，面积失真
+# - lambert 兰勃特等角圆锥：中纬度区域最常用（天气图标准），新疆东西跨 30 个经度时形状最准
+# - mercator 墨卡托：保角（航向不变），但高纬面积严重放大
+PROJECTIONS = {
+    "plate": ccrs.PlateCarree,
+    "lambert": lambda: ccrs.LambertConformal(central_longitude=85.0, central_latitude=42.5),
+    "mercator": ccrs.Mercator,
+}
+
 
 def setup_style() -> None:
     """中文字体（Windows 自带雅黑/黑体），负号正常显示。"""
@@ -57,14 +67,22 @@ def plot_map(
     dpi: int = 300,
     gridlines: bool = True,
     cbar_label: str = CBAR_LABEL,
+    projection: str = "plate",
 ):
-    """单张填色图：风速场 + 国界 + 海岸线 + 色标。"""
+    """单张填色图：风速场 + 国界 + 海岸线 + 色标。
+
+    projection: "plate" | "lambert" | "mercator"，默认 plate（与旧行为一致）。
+    """
     setup_style()
-    proj = ccrs.PlateCarree()
+    if projection not in PROJECTIONS:
+        raise ValueError(f"未知投影 {projection!r}，可选：{list(PROJECTIONS)}")
+    data_crs = ccrs.PlateCarree()      # 数据本身的坐标参考系，永远是等经纬度
+    proj = PROJECTIONS[projection]()   # 只决定"怎么摊到纸上"
     fig, ax = plt.subplots(figsize=(9, 6), subplot_kw={"projection": proj})
     lv = DEFAULT_LEVELS if levels is None else levels
+    # transform=data_crs 不能省：省了数据会画到错误位置，而且不报错
     cf = ax.contourf(field.longitude, field.latitude, field.values, levels=lv,
-                     cmap=cmap, transform=proj, extend="both")
+                     cmap=cmap, transform=data_crs, extend="both")
     cb = fig.colorbar(cf, ax=ax, shrink=0.85, pad=0.03)
     cb.set_label(cbar_label)
     _add_map_features(ax, gridlines=gridlines)

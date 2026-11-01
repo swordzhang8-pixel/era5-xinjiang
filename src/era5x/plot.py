@@ -16,6 +16,7 @@ matplotlib.use("Agg")
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.dates as mdates
+import matplotlib.patheffects as patheffects
 import matplotlib.pyplot as plt
 import numpy as np
 import xarray as xr
@@ -23,7 +24,7 @@ from shapely.geometry import shape
 
 EXTENT = [70, 100, 35, 50]                       # 新疆：70–100°E / 35–50°N
 DEFAULT_LEVELS = np.arange(0, 8.5, 0.5)          # 固定的等值线，跨图可比
-CBAR_LABEL = "10 米风速 (m s$^{-1}$)"
+CBAR_LABEL = "10 米风速 (m s⁻¹)"
 ADMIN_GEOJSON = Path(__file__).resolve().parents[2] / "data" / "admin" / "xinjiang_pref.json"
 
 # 投影选择表：名字 → 构造函数（用 lambda 是为了延迟创建，图与图之间不共享状态）
@@ -38,9 +39,37 @@ PROJECTIONS = {
 
 
 def setup_style() -> None:
-    """中文字体（Windows 自带雅黑/黑体），负号正常显示。"""
-    plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "DejaVu Sans"]
-    plt.rcParams["axes.unicode_minus"] = False
+    """期刊风格：Arial/无衬线、小字号、细边框、刻度朝外。
+
+    Nature/Science 那类图的共同点：
+    - 正文字号 7–9 pt（不是默认 10，更不是标题 12+）
+    - 坐标轴线宽 0.5–0.8，刻度短（2–3 pt）
+    - 网格很淡或不画，不抢数据
+    - 中文靠字体回退：Arial 没有汉字，落到微软雅黑
+    """
+    plt.rcParams.update({
+        # font.family 必须是「字体列表」而不是 "sans-serif" 别名——
+        # 只有列表形式才会逐字形回退：拉丁字母用 Arial，汉字自动落到雅黑。
+        "font.family": ["Arial", "Microsoft YaHei", "SimHei", "DejaVu Sans"],
+        "font.size": 8,
+        "axes.titlesize": 9,
+        "axes.titleweight": "normal",
+        "axes.labelsize": 8,
+        "xtick.labelsize": 7,
+        "ytick.labelsize": 7,
+        "legend.fontsize": 7,
+        "legend.frameon": False,
+        "axes.linewidth": 0.6,
+        "axes.edgecolor": "0.15",
+        "xtick.direction": "out",
+        "ytick.direction": "out",
+        "xtick.major.width": 0.6,
+        "ytick.major.width": 0.6,
+        "xtick.major.size": 2.5,
+        "ytick.major.size": 2.5,
+        "axes.unicode_minus": False,
+        "savefig.dpi": 300,
+    })
 
 
 @lru_cache(maxsize=2)
@@ -85,41 +114,47 @@ def _load_admin_labels(path: str):
 
 
 def _add_scale_bar(ax, length_km: int = 400, lat: float = 36.2, lon: float = 74.0) -> None:
-    """左下角画比例尺。
+    """左下角画比例尺：一条细黑线 + 两端短竖线 + 居中标注（期刊常用样式）。
 
     经度方向的 1° 对应的实际距离随纬度收缩：1° ≈ 111.32·cos(lat) km，
     所以同样 400 km，在 36°N 需要 400 / (111.32·cos36°) ≈ 4.4 个经度。
-    位置刻意放在 36°N 附近——那里是塔里木盆地南缘，数据连续、没有国界穿过。
     """
     deg = length_km / (111.32 * np.cos(np.deg2rad(lat)))
-    ax.plot([lon, lon + deg], [lat, lat], color="black", lw=3.5,
-            transform=ccrs.PlateCarree(), zorder=8, solid_capstyle="butt")
-    ax.text(lon + deg / 2, lat + 0.5, f"{length_km} km", ha="center", va="bottom",
-            fontsize=8, transform=ccrs.PlateCarree(), zorder=8)
+    lw, crs_ = 0.9, ccrs.PlateCarree()
+    ax.plot([lon, lon + deg], [lat, lat], color="0.1", lw=lw,
+            transform=crs_, zorder=8, solid_capstyle="butt")
+    for x in (lon, lon + deg):                       # 两端竖线，让长度一眼可读
+        ax.plot([x, x], [lat, lat + 0.28], color="0.1", lw=lw,
+                transform=crs_, zorder=8, solid_capstyle="butt")
+    ax.text(lon + deg / 2, lat + 0.45, f"{length_km} km", ha="center", va="bottom",
+            fontsize=7, color="0.1", transform=crs_, zorder=8)
 
 
 def _add_north_arrow(ax) -> None:
-    """右上角画指北针（axes 坐标，不随投影变）。"""
-    ax.annotate("N", xy=(0.94, 0.94), xytext=(0.94, 0.82),
+    """右上角指北针：细箭头 + 小号 N，不喧宾夺主。"""
+    ax.annotate("", xy=(0.945, 0.935), xytext=(0.945, 0.845),
                 xycoords="axes fraction", textcoords="axes fraction",
-                ha="center", va="center", fontsize=10, fontweight="bold", zorder=9,
-                arrowprops=dict(arrowstyle="-|>", color="black", lw=1.2))
+                arrowprops=dict(arrowstyle="-|>", color="0.1", lw=0.9,
+                                mutation_scale=9), zorder=9)
+    ax.text(0.945, 0.955, "N", transform=ax.transAxes, ha="center", va="bottom",
+            fontsize=7, color="0.1", zorder=9)
 
 
 def _add_map_features(ax, gridlines: bool = False, *, rivers: bool = False,
                       admin: str | Path | None = None, scalebar: bool = False,
                       north: bool = False) -> None:
-    """统一加地图要素。默认只加海岸线与国界，其余按需打开。"""
+    """统一加地图要素。国界/网格默认开，河流、地州、比例尺、指北针由调用方决定。"""
     data_crs = ccrs.PlateCarree()
     ax.set_extent(EXTENT, crs=data_crs)          # 范围按经纬度给，投影自己换算
-    ax.add_feature(cfeature.COASTLINE, linewidth=0.5, edgecolor="0.3")
-    ax.add_feature(cfeature.BORDERS, linewidth=0.8, edgecolor="black")
+    ax.add_feature(cfeature.COASTLINE, linewidth=0.4, edgecolor="0.4")
+    ax.add_feature(cfeature.BORDERS, linewidth=0.7, edgecolor="0.15")
 
     if rivers:
         # Natural Earth 河流数据首次会联网下载；失败不该让整张图报废
         try:
-            ax.add_feature(cfeature.RIVERS.with_scale("50m"), linewidth=0.45,
-                           edgecolor="#2f6fb3", zorder=4)
+            # 只画河流，不画湖泊：新疆尺度下湖泊会变成几块白斑，反而干扰判读
+            ax.add_feature(cfeature.RIVERS.with_scale("50m"), linewidth=0.7,
+                           edgecolor="#2f6fae", alpha=0.9, zorder=4)
         except Exception as exc:                 # noqa: BLE001
             print(f"⚠ 河流要素加载失败（跳过）：{type(exc).__name__}")
 
@@ -127,19 +162,23 @@ def _add_map_features(ax, gridlines: bool = False, *, rivers: bool = False,
         path = str(admin) if admin is not True else str(ADMIN_GEOJSON)
         geoms = _load_admin_geoms(path)
         ax.add_geometries(geoms, crs=data_crs, facecolor="none",
-                          edgecolor="0.15", linewidth=0.6, zorder=5)
-        # 地州名：不标的话，读者只能看到一堆无意义的黑线
+                          edgecolor="0.25", linewidth=0.5, zorder=5)
+        # 地名不用白底框（那是最"贴纸"的做法），改成白色描边光晕：
+        # 文字压在色块上依然可读，但看起来是图的一部分，不是贴上去的标签。
+        halo = [patheffects.withStroke(linewidth=2.0, foreground="white")]
         for name, lon, lat in _load_admin_labels(path):
             if not name:
                 continue
-            ax.text(lon, lat, name, fontsize=6.5, ha="center", va="center",
-                    transform=data_crs, zorder=7,
-                    bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=0.8))
+            ax.text(lon, lat, name, fontsize=6, color="0.12",
+                    ha="center", va="center", transform=data_crs, zorder=7,
+                    path_effects=halo)
 
     if gridlines:
-        gl = ax.gridlines(draw_labels=True, linestyle=":", linewidth=0.4, color="0.5")
+        gl = ax.gridlines(draw_labels=True, linestyle=":", linewidth=0.35, color="0.6")
         gl.top_labels = False
         gl.right_labels = False
+        gl.xlabel_style = {"size": 7, "color": "0.2"}
+        gl.ylabel_style = {"size": 7, "color": "0.2"}
 
     if scalebar:
         _add_scale_bar(ax)
@@ -164,16 +203,16 @@ def plot_map(
     dpi: int = 300,
     gridlines: bool = True,
     cbar_label: str = CBAR_LABEL,
-    projection: str = "plate",
-    rivers: bool = False,
-    admin: str | Path | None = None,
-    scalebar: bool = False,
-    north: bool = False,
+    projection: str = "lambert",
+    rivers: bool = True,
+    admin: str | Path | None = True,
+    scalebar: bool = True,
+    north: bool = True,
 ):
-    """单张填色图：风速场 + 国界 + 海岸线 + 色标。
+    """单张填色图：风场 + 投影 + 河流/地州/比例尺/指北针 + 色标。
 
-    projection: "plate" | "lambert" | "mercator"，默认 plate（与旧行为一致）。
-    rivers/admin/scalebar/north: 可选要素，默认全关，保证旧图不变样。
+    projection 默认 lambert：新疆跨 30 个经度，等经纬度会把东西向拉长。
+    rivers/admin/scalebar/north 默认全开；要"素图"就显式传 False。
     """
     setup_style()
     if projection not in PROJECTIONS:
@@ -185,12 +224,15 @@ def plot_map(
     # transform=data_crs 不能省：省了数据会画到错误位置，而且不报错
     cf = ax.contourf(field.longitude, field.latitude, field.values, levels=lv,
                      cmap=cmap, transform=data_crs, extend="both")
-    cb = fig.colorbar(cf, ax=ax, shrink=0.85, pad=0.03)
-    cb.set_label(cbar_label)
+    # 色标：细一点、短一点，期刊图里它不该抢主体
+    cb = fig.colorbar(cf, ax=ax, shrink=0.78, pad=0.02, aspect=28)
+    cb.set_label(cbar_label, fontsize=7)
+    cb.outline.set_linewidth(0.5)
+    cb.ax.tick_params(labelsize=7, width=0.5, length=2)
     _add_map_features(ax, gridlines=gridlines, rivers=rivers, admin=admin,
                       scalebar=scalebar, north=north)
     if title:
-        ax.set_title(title, pad=12)
+        ax.set_title(title, pad=8, fontsize=9)
     _save(fig, out, dpi)
     return fig, ax
 

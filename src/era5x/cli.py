@@ -1,4 +1,4 @@
-﻿"""era5x 命令行入口：python -m era5x <子命令>
+"""era5x 命令行入口：python -m era5x <子命令>
 
 为什么要有 CLI：
     现在 12 个脚本靠编号 0–11 记住顺序，参数散落在每个文件里；
@@ -44,23 +44,25 @@ def cmd_plot(args: argparse.Namespace) -> int:
     field = ws.mean("time")                # 时间平均 → 一张 2D 场
     out = Path(args.out)
 
-    # --full：一次打开全部地图要素（河流/地州边界/比例尺/指北针），
-    # 省得每次记四个开关；单独开关仍然有效，可以只补其中一两样。
-    rivers = args.rivers or args.full
-    admin = (args.admin or args.full) or None
-    scalebar = args.scalebar or args.full
-    north = args.north or args.full
-    # --full 时默认切到兰勃特：新疆跨 30 个经度，等经纬度会把东西向拉长
-    projection = "lambert" if (args.full and args.projection == "plate") else args.projection
+    # 默认就是"完整版"：河流 + 地州名 + 比例尺 + 指北针 + 兰勃特投影。
+    # 想要素图（只留国界和网格）就加 --plain；想临时少一样，用对应的 --no-xxx。
+    if args.plain:
+        rivers = admin = scalebar = north = False
+    else:
+        rivers = not args.no_rivers
+        admin = not args.no_admin          # True → 用默认 GeoJSON
+        scalebar = not args.no_scalebar
+        north = not args.no_north
 
     eplot.plot_map(field, out, title=args.title or f"ERA5 10m 风速 {args.month or '全时段平均'}",
                    levels=None,            # None → 用库里的默认 levels（0–8.5，跨图可比）
-                   projection=projection,        # plate / lambert / mercator
-                   rivers=rivers,                # 河流
-                   admin=admin,                  # 地州边界（给路径，或 --admin 用默认）
-                   scalebar=scalebar,            # 比例尺
-                   north=north)                  # 指北针
-    print(f"已保存: {out}（投影 {projection}，要素: 河流={rivers} 地州={bool(admin)} 比例尺={scalebar} 指北针={north}）")
+                   projection=args.projection,   # 默认 lambert
+                   rivers=rivers,
+                   admin=admin,
+                   scalebar=scalebar,
+                   north=north)
+    print(f"已保存: {out}（投影 {args.projection}，要素: 河流={rivers} 地州={bool(admin)} "
+          f"比例尺={scalebar} 指北针={north}）")
     return 0
 
 
@@ -110,15 +112,15 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--month", default=None, help="如 2015-07；省略=全时段平均")
     p.add_argument("--out", default="3_成果图/cli_plot.png")
     p.add_argument("--title", default=None)
-    # 投影：默认 plate（等经纬度），与旧行为一致；lambert 适合中纬度大区域
-    p.add_argument("--projection", default="plate", choices=["plate", "lambert", "mercator"])
-    # 可选地图要素：默认全关，逐个开关，避免旧图变样
-    p.add_argument("--rivers", action="store_true", help="叠加河流（首次会下载 Natural Earth 数据）")
-    p.add_argument("--admin", nargs="?", const=True, default=None,
-                   help="叠加地州边界；不给值用默认 data/admin/xinjiang_pref.json")
-    p.add_argument("--scalebar", action="store_true", help="左下角加 500 km 比例尺")
-    p.add_argument("--north", action="store_true", help="右上角加指北针")
-    p.add_argument("--full", action="store_true", help="一次打开全部要素（并默认用兰勃特投影）")
+    # 默认就是"完整版"：兰勃特投影 + 河流 + 地州名 + 比例尺 + 指北针
+    p.add_argument("--projection", default="lambert", choices=["plate", "lambert", "mercator"])
+    p.add_argument("--plain", action="store_true", help="要素图：只要国界和网格，不要河流/地名/比例尺/指北针")
+    p.add_argument("--no-rivers", action="store_true", help="关掉河流")
+    p.add_argument("--no-admin", action="store_true", help="关掉地州边界与地名")
+    p.add_argument("--no-scalebar", action="store_true", help="关掉比例尺")
+    p.add_argument("--no-north", action="store_true", help="关掉指北针")
+    # 兼容旧写法：--full 现在等于默认行为，保留不报错
+    p.add_argument("--full", action="store_true", help="（已默认开启，保留兼容）")
     p.set_defaults(func=cmd_plot)
 
     p = sub.add_parser("series", help="画单点时间序列")

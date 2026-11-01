@@ -53,6 +53,37 @@ def _load_admin_geoms(path: str):
     return [shape(f["geometry"]) for f in data["features"]]
 
 
+# 地州简称表（按 adcode）。不缩写的话，图上会出现
+# "克孜勒苏柯尔克孜自治州" 这种 10 个字压在半张图上。
+ADMIN_SHORT = {
+    "650100": "乌鲁木齐", "650200": "克拉玛依", "650400": "吐鲁番", "650500": "哈密",
+    "652300": "昌吉", "652700": "博州", "652800": "巴州", "652900": "阿克苏",
+    "653000": "克州", "653100": "喀什", "653200": "和田", "654000": "伊犁",
+    "654200": "塔城", "654300": "阿勒泰",
+}
+# 兵团直管市（石河子、五家渠、北屯…）面积小、彼此挤在一起，图集里不标注
+SKIP_LABEL = {"659001", "659002", "659003", "659004", "659005", "659006",
+              "659007", "659008", "659009", "659010", "659011", "659012"}
+
+
+@lru_cache(maxsize=2)
+def _load_admin_labels(path: str):
+    """地州名 + 标注点：取每个地州最大那块多边形的代表点，避免标到飞地上。"""
+    data = json.loads(Path(path).read_text(encoding="utf-8"))
+    out = []
+    for feat in data["features"]:
+        code = str(feat["properties"].get("adcode", ""))
+        if code in SKIP_LABEL:
+            continue
+        name = ADMIN_SHORT.get(code) or (feat["properties"].get("name") or "")
+        geom = shape(feat["geometry"])
+        polys = list(geom.geoms) if geom.geom_type == "MultiPolygon" else [geom]
+        big = max(polys, key=lambda p: p.area)       # 只用最大的一块
+        pt = big.representative_point()
+        out.append((name, pt.x, pt.y))
+    return out
+
+
 def _add_scale_bar(ax, length_km: int = 400, lat: float = 36.2, lon: float = 74.0) -> None:
     """左下角画比例尺。
 
@@ -87,15 +118,23 @@ def _add_map_features(ax, gridlines: bool = False, *, rivers: bool = False,
     if rivers:
         # Natural Earth 河流数据首次会联网下载；失败不该让整张图报废
         try:
-            ax.add_feature(cfeature.RIVERS.with_scale("50m"), linewidth=0.35,
-                           edgecolor="steelblue", zorder=4)
+            ax.add_feature(cfeature.RIVERS.with_scale("50m"), linewidth=0.45,
+                           edgecolor="#2f6fb3", zorder=4)
         except Exception as exc:                 # noqa: BLE001
             print(f"⚠ 河流要素加载失败（跳过）：{type(exc).__name__}")
 
     if admin:
-        geoms = _load_admin_geoms(str(admin) if admin is not True else str(ADMIN_GEOJSON))
+        path = str(admin) if admin is not True else str(ADMIN_GEOJSON)
+        geoms = _load_admin_geoms(path)
         ax.add_geometries(geoms, crs=data_crs, facecolor="none",
-                          edgecolor="0.15", linewidth=0.45, zorder=5)
+                          edgecolor="0.15", linewidth=0.6, zorder=5)
+        # 地州名：不标的话，读者只能看到一堆无意义的黑线
+        for name, lon, lat in _load_admin_labels(path):
+            if not name:
+                continue
+            ax.text(lon, lat, name, fontsize=6.5, ha="center", va="center",
+                    transform=data_crs, zorder=7,
+                    bbox=dict(facecolor="white", alpha=0.75, edgecolor="none", pad=0.8))
 
     if gridlines:
         gl = ax.gridlines(draw_labels=True, linestyle=":", linewidth=0.4, color="0.5")

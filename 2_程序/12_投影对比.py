@@ -40,7 +40,8 @@ INFO = {
     "mercator": ("墨卡托", "保角，但高纬面积放大"),
 }
 
-
+eplot.plot_map(field, "x.png", projection="lambert",
+               rivers=True, admin=True, scalebar=True, north=True)
 def main() -> int:
     eplot.setup_style()
 
@@ -83,7 +84,6 @@ def main() -> int:
     print(f"已保存: {out.name}")
     print("单张:", "、".join(f"投影_{cn}.png" for cn, _ in INFO.values()))
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

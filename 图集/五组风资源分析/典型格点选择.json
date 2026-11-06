@@ -1,0 +1,26 @@
+[
+  {
+    "name": "低局地阈值点",
+    "latitude": 42.25,
+    "longitude": 80.75,
+    "baseline_p95": 1.023041844367981,
+    "relative_rate": 5.355920602327173,
+    "absolute_rate": 0.0
+  },
+  {
+    "name": "高局地阈值点",
+    "latitude": 43.0,
+    "longitude": 91.75,
+    "baseline_p95": 12.821959447860719,
+    "relative_rate": 4.774127310061601,
+    "absolute_rate": 8.932238193018481
+  },
+  {
+    "name": "超阈率反差点",
+    "latitude": 37.0,
+    "longitude": 76.5,
+    "baseline_p95": 2.1982069015502934,
+    "relative_rate": 8.025325119780971,
+    "absolute_rate": 0.0
+  }
+]

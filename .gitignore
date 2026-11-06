@@ -18,3 +18,9 @@ token*.ps1
 *.egg-info/
 build/
 dist/
+
+# Small derived analysis products; raw data remain excluded.
+!图集/阈值对照/*.nc
+!图集/双色差值/*.nc
+!图集/五组风资源分析/*.nc
+!图集/年际波动与月份显著性/*.nc

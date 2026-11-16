@@ -1,0 +1,248 @@
+[
+  {
+    "name": "gfs_20240701_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240701/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42621543,
+    "sha256": "5305e897385ae20bd6aa02d5e906dd56fe1be5c29296a126580557c2c2cfff23"
+  },
+  {
+    "name": "gfs_20240701_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240701/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42131098,
+    "sha256": "7ffa02c81d00866e75e8a146e84e9acb98bb32ffe46c379e56d229832d0d48e0"
+  },
+  {
+    "name": "gfs_20240701_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240701/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 41703618,
+    "sha256": "be76df4838a4d2eb90f62cf375ddbbf286f116401173171066d9328a3d7025d0"
+  },
+  {
+    "name": "gfs_20240701_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240701/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42438168,
+    "sha256": "76d4dabf1a4885b054c0ab486f0c8b62415b78b6bc1df3ae189943865caa0fb0"
+  },
+  {
+    "name": "gfs_20240702_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240702/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42334993,
+    "sha256": "c883944bcf3581c811b1e7869c1e754c9186703b439a42d5079986abb7185570"
+  },
+  {
+    "name": "gfs_20240702_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240702/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42467971,
+    "sha256": "eb1010912fbe62a2ad4a8a17f872185a71e03286202163a5d98e2108721c7167"
+  },
+  {
+    "name": "gfs_20240702_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240702/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 42631540,
+    "sha256": "da55059630bc010365209b48bf33847562901fdd35ee686e56097088a955991f"
+  },
+  {
+    "name": "gfs_20240702_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240702/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42622779,
+    "sha256": "6b0e1c8eeea21bc0254fe85fea11d4c9205080c9eb587992cf59f91a5e5342f0"
+  },
+  {
+    "name": "gfs_20240703_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240703/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42113720,
+    "sha256": "6ae610f5f777cc292afcadd9b77398c7eecd0c597302ccfe9715b0b88b6049db"
+  },
+  {
+    "name": "gfs_20240703_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240703/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 41766522,
+    "sha256": "89d1152f13f4b7f603137af886168a454563c4051f5590e50cdc3362c34c229c"
+  },
+  {
+    "name": "gfs_20240703_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240703/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 41875347,
+    "sha256": "6fe928b71bf9f4c0b97780178e8054e242247c2fea5dde11257685632ca721b1"
+  },
+  {
+    "name": "gfs_20240703_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240703/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42216846,
+    "sha256": "acdbc7267695c67971dce7d81a7fda18d8be9ec421f064d38a9e769074d0e045"
+  },
+  {
+    "name": "gfs_20240704_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240704/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42244029,
+    "sha256": "79d0e0d2f9de1fad0992857deeb8f612f02c88c9dda36bed822103b4657adc06"
+  },
+  {
+    "name": "gfs_20240704_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240704/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42221132,
+    "sha256": "b51ec1161b4071a0a2f951b526a3d202db638f72cbf417e90c0dfc051a2fad86"
+  },
+  {
+    "name": "gfs_20240704_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240704/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 42086613,
+    "sha256": "fc93973424baa89f8a9bbcd5150f15b7ea1a134bd8807f9e9675b4f87a8e6279"
+  },
+  {
+    "name": "gfs_20240704_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240704/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42260087,
+    "sha256": "9aa57b038fef1adf7b2b29b7e59bbd5647e01a897eb36940dc7dea6b39534842"
+  },
+  {
+    "name": "gfs_20240705_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240705/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42464397,
+    "sha256": "20ab7c35d5b03352f04bc8fbeaa8cb689ee93fc1bd63ca1c31c529891298b5f0"
+  },
+  {
+    "name": "gfs_20240705_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240705/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42336000,
+    "sha256": "7a7ad7c89fac2d9b79871a3b383e22d83381d7042fde71ceab8ed42348be62c1"
+  },
+  {
+    "name": "gfs_20240705_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240705/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 42173419,
+    "sha256": "fbd22771b0765d68d17ffea140fc73b5837725baefbc3751afedf254dc977d58"
+  },
+  {
+    "name": "gfs_20240705_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240705/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42492654,
+    "sha256": "fea050a90741b081029c46793d489cd8aeb97b278e7a130e6eeec259ee9f290c"
+  },
+  {
+    "name": "gfs_20240706_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240706/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42351880,
+    "sha256": "78efd7f81f530227a366b4a500cde57aaa5b7d2202f252646cd90cd257ac5779"
+  },
+  {
+    "name": "gfs_20240706_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240706/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42327807,
+    "sha256": "422b6c11ca72c4c6e10fbe80cc04a6d09633b185de0ea392dbbb4f3d793a3259"
+  },
+  {
+    "name": "gfs_20240706_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240706/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 42292215,
+    "sha256": "fc2b7f69226afc13102f97794de3f2c9a61b6227586abbab5963146caa97b56a"
+  },
+  {
+    "name": "gfs_20240706_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240706/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42468789,
+    "sha256": "4cffd3a04ad10496fc8e0b06e2449171d1d6f826ebe605e68ddf51aace9c7dca"
+  },
+  {
+    "name": "gfs_20240707_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240707/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42587871,
+    "sha256": "9217114f98e0cee08807862d84a5350c10465a1b8dc58b7bc0b87db850d5435a"
+  },
+  {
+    "name": "gfs_20240707_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240707/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42535127,
+    "sha256": "dd9d94956f7563452cbb654e7af0824694122d1fa8107b11ad2b754fe058ea33"
+  },
+  {
+    "name": "gfs_20240707_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240707/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 42207334,
+    "sha256": "fd2d5f8ee9507802f8b48c8732edf0c413edf4fcb8d3fc318df88fd76543390c"
+  },
+  {
+    "name": "gfs_20240707_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240707/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42172539,
+    "sha256": "3b0fe8214f82a14067576a8dcc3c800a2767e0c1a3614cc5c589030acb9f9abb"
+  },
+  {
+    "name": "gfs_20240708_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240708/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42107839,
+    "sha256": "e6b2e3e85ad50b5b83378487f269bbdd81ec00b0aea21b1054e8764378651c76"
+  },
+  {
+    "name": "gfs_20240708_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240708/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42429580,
+    "sha256": "2da70a4a025d806acf1e2dc95053cec1d2b3807d20316886b099eb26f48de5a1"
+  },
+  {
+    "name": "gfs_20240708_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240708/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 41829838,
+    "sha256": "ad07aaa2760b87710e8c92d19eb20de817c209d14fd02ac2f780cc6a2f70f471"
+  },
+  {
+    "name": "gfs_20240708_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240708/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 41890423,
+    "sha256": "fb1aadf7832596c612a0d02afcb27addf3860b989479c4c2cd74b552d987ea5f"
+  },
+  {
+    "name": "gfs_20240709_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240709/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 41802242,
+    "sha256": "78240ec6c618b9c20fd5654315dbc1264c103c6ca70f22b85be054541202695e"
+  },
+  {
+    "name": "gfs_20240709_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240709/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 42005827,
+    "sha256": "393c3404a92314218124cfb81002ffdb97df824b2e846c3bc1e6ecf948199b21"
+  },
+  {
+    "name": "gfs_20240709_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240709/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 41733280,
+    "sha256": "3b8d200e2dbd9c44be32dd48869e4a7abfbbce06c5d9206fd42815d61364a6aa"
+  },
+  {
+    "name": "gfs_20240709_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240709/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 41772744,
+    "sha256": "882499870d692b7fa958fb0bf9fb661437174a081b72521103bb59bbffa7e863"
+  },
+  {
+    "name": "gfs_20240710_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240710/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42034067,
+    "sha256": "caad6ed398588bd6f8e61be3296b7bfc60f5f02ed73734bfed83e736cf0c6509"
+  },
+  {
+    "name": "gfs_20240710_06_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240710/06/atmos/gfs.t06z.pgrb2.1p00.f000",
+    "bytes": 41964478,
+    "sha256": "8d847d23d2bd724198df762b4a5dc388e737e8656cab2e2a2019d99f0d434da0"
+  },
+  {
+    "name": "gfs_20240710_12_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240710/12/atmos/gfs.t12z.pgrb2.1p00.f000",
+    "bytes": 41949729,
+    "sha256": "214f0af9bff3520e1905108f4e995da9096cd780ebb4369b87e3f72a0706ec3c"
+  },
+  {
+    "name": "gfs_20240710_18_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240710/18/atmos/gfs.t18z.pgrb2.1p00.f000",
+    "bytes": 42052365,
+    "sha256": "3d543a3c131f02f87d056ae8b364e1d90e3ab4e85e8539497a0674b83b9ca957"
+  },
+  {
+    "name": "gfs_20240711_00_1p00_f000.grib2",
+    "url": "https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.20240711/00/atmos/gfs.t00z.pgrb2.1p00.f000",
+    "bytes": 42254304,
+    "sha256": "7fc7aec9f10c800d6a94f9b62a33509dfebd53041aef7e1d96e84b0f9def5fc0"
+  }
+]

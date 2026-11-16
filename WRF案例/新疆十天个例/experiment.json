@@ -1,0 +1,21 @@
+{
+  "case_root": "/home/zhangjian/WRF_BUILD/cases/xinjiang_10d_20240701_20261116_104400",
+  "start_utc": "2024-07-01_00:00:00",
+  "end_utc": "2024-07-11_00:00:00",
+  "duration_hours": 240,
+  "grid_m": 27000,
+  "dimensions": [
+    111,
+    101,
+    45
+  ],
+  "dt_seconds": 90,
+  "forcing": "GFS 1-degree f000 analyses, 41 cycles, 6-hourly; NOT a single 240h GFS forecast",
+  "model": "original WRF 4.8.0, no wind/PV extension",
+  "MPI_ranks": 4,
+  "spinup_note": "first 24 hours retained and flagged for later assessment, not assumed equilibrated",
+  "metgrid_levels": 34,
+  "soil_levels": 4,
+  "num_land_cat": 21,
+  "wrf_binary_sha256": "b3cffa883f45b72bf06390f5d9e5fe8b2145f6857a76ee2cd7eba1f77698312f"
+}

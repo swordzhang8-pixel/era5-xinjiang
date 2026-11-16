@@ -1,0 +1,7 @@
+GFS/
+*.zip
+*.nc
+*.grib2
+rsl.*
+__pycache__/
+

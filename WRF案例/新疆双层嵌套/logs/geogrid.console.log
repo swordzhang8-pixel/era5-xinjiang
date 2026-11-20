@@ -1,0 +1,146 @@
+Parsed 60 entries in GEOGRID.TBL
+Processing domain 1 of 2
+  Processing XLAT and XLONG
+  Processing MAPFAC
+  Processing F and E
+  Processing ROTANG
+  Processing LANDUSEF
+  Calculating landmask from LANDUSEF ( WATER =  17  21 )
+  Processing HGT_M
+  Processing SOILTEMP
+  Processing SOILCTOP
+  Processing SCT_DOM
+  Processing SOILCBOT
+  Processing SCB_DOM
+  Processing ALBEDO12M
+  Processing GREENFRAC
+  Processing LAI12M
+  Processing SNOALB
+  Processing CON
+  Processing VAR
+  Processing OA1
+  Processing OA2
+  Processing OA3
+  Processing OA4
+  Processing OL1
+  Processing OL2
+  Processing OL3
+  Processing OL4
+
+  Optional fields not processed by geogrid:
+    VAR_SSO (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/varsso_10m/')
+    LAKE_DEPTH (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/lake_depth/')
+    URB_PARAM (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/NUDAPT44_1km/')
+    URB_PARAM (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/gloucp2020_30s/')
+    FRC_URB2D (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/urbfrac_nlcd2011/')
+    FRC_URB2D (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/urbfrac_gaia2020_30s/')
+    IMPERV (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/nlcd2011_imp_ll_9s/')
+    IMPERV (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/impfrac_gaia2020_30s/')
+    CANFRA (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/nlcd2011_can_ll_9s/')
+    EROD (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/erod/')
+    CLAYFRAC (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/clayfrac_5m/')
+    SANDFRAC (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/sandfrac_5m/')
+    IRRIGATION (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/irrigation/fao/')
+    CONLS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/conls/')
+    VARLS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/varls/')
+    OA1LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa1ls/')
+    OA2LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa2ls/')
+    OA3LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa3ls/')
+    OA4LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa4ls/')
+    OL1LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol1ls/')
+    OL2LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol2ls/')
+    OL3LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol3ls/')
+    OL4LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol4ls/')
+    CONSS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/conss/')
+    VARSS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/varss/')
+    OA1SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa1ss/')
+    OA2SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa2ss/')
+    OA3SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa3ss/')
+    OA4SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa4ss/')
+    OL1SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol1ss/')
+    OL2SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol2ss/')
+    OL3SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol3ss/')
+    OL4SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol4ss/')
+    BATHYMETRY (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/topobath_30s/')
+    MH_URB2D (priority=1, resolution='', path='')
+    ZD_URB2D (priority=1, resolution='', path='')
+    Z0_URB2D (priority=1, resolution='', path='')
+    BUILD_AREA_FRACTION (priority=1, resolution='', path='')
+    LF_URB2D_S (priority=1, resolution='', path='')
+    AHE (priority=1, resolution='', path='')
+    AHE (priority=2, resolution='', path='')
+
+Processing domain 2 of 2
+  Processing XLAT and XLONG
+  Processing MAPFAC
+  Processing F and E
+  Processing ROTANG
+  Processing LANDUSEF
+  Calculating landmask from LANDUSEF ( WATER =  17  21 )
+  Processing HGT_M
+  Processing SOILTEMP
+  Processing SOILCTOP
+  Processing SCT_DOM
+  Processing SOILCBOT
+  Processing SCB_DOM
+  Processing ALBEDO12M
+  Processing GREENFRAC
+  Processing LAI12M
+  Processing SNOALB
+  Processing CON
+  Processing VAR
+  Processing OA1
+  Processing OA2
+  Processing OA3
+  Processing OA4
+  Processing OL1
+  Processing OL2
+  Processing OL3
+  Processing OL4
+
+  Optional fields not processed by geogrid:
+    VAR_SSO (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/varsso_10m/')
+    LAKE_DEPTH (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/lake_depth/')
+    URB_PARAM (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/NUDAPT44_1km/')
+    URB_PARAM (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/gloucp2020_30s/')
+    FRC_URB2D (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/urbfrac_nlcd2011/')
+    FRC_URB2D (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/urbfrac_gaia2020_30s/')
+    IMPERV (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/nlcd2011_imp_ll_9s/')
+    IMPERV (priority=2, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/impfrac_gaia2020_30s/')
+    CANFRA (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/nlcd2011_can_ll_9s/')
+    EROD (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/erod/')
+    CLAYFRAC (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/clayfrac_5m/')
+    SANDFRAC (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/sandfrac_5m/')
+    IRRIGATION (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/irrigation/fao/')
+    CONLS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/conls/')
+    VARLS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/varls/')
+    OA1LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa1ls/')
+    OA2LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa2ls/')
+    OA3LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa3ls/')
+    OA4LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa4ls/')
+    OL1LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol1ls/')
+    OL2LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol2ls/')
+    OL3LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol3ls/')
+    OL4LS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol4ls/')
+    CONSS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/conss/')
+    VARSS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/varss/')
+    OA1SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa1ss/')
+    OA2SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa2ss/')
+    OA3SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa3ss/')
+    OA4SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/oa4ss/')
+    OL1SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol1ss/')
+    OL2SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol2ss/')
+    OL3SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol3ss/')
+    OL4SS (priority=1, resolution='lowres', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/orogwd3_1deg/ol4ss/')
+    BATHYMETRY (priority=1, resolution='default', path='/home/zhangjian/WRF_BUILD/DATA/wps_practice/WPS_GEOG_LOW_RES/topobath_30s/')
+    MH_URB2D (priority=1, resolution='', path='')
+    ZD_URB2D (priority=1, resolution='', path='')
+    Z0_URB2D (priority=1, resolution='', path='')
+    BUILD_AREA_FRACTION (priority=1, resolution='', path='')
+    LF_URB2D_S (priority=1, resolution='', path='')
+    AHE (priority=1, resolution='', path='')
+    AHE (priority=2, resolution='', path='')
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!  Successful completion of geogrid.        !
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
